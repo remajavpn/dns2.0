@@ -21,15 +21,7 @@ clear
 IP=$(wget -4qO- "http://whatismyip.akamai.com/")
 
 
-else
-	echo ""
-	echo "OS ที่คุณใช้ไม่สามารถรองรับได้กับสคริปท์นี้"
-	echo "สำหรับ OS ที่รองรับได้ จะมีดังนี้..."
-	echo ""
-	echo "Debian 9"
-	echo ""
-	exit
-fi
+
 
 # Color
 GRAY='\033[1;33m'
