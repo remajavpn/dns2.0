@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# text gambar
+apt-get install boxes
+
+# color text
+cd
+rm -rf /root/.bashrc
+wget -O /root/.bashrc "https://raw.githubusercontent.com/KeningauVPS/sslmode/master/tools/.bashrc"
+
+# install lolcat
+sudo apt-get -y install ruby
+sudo gem install lolcat
+
+# download script
+cd /usr/bin
+wget -O menu "https://raw.githubusercontent.com/acillsadank/install/master/menu.sh"
+wget -O edit "https://raw.githubusercontent.com/acillsadank/install/master/edit-ports.sh"
+wget -O edit-dropbear "https://raw.githubusercontent.com/acillsadank/install/master/edit-dropbear.sh"
+wget -O edit-openssh "https://raw.githubusercontent.com/acillsadank/install/master/edit-openssh.sh"
+wget -O edit-openvpn "https://raw.githubusercontent.com/acillsadank/install/master/edit-openvpn.sh"
+wget -O edit-squid3 "https://raw.githubusercontent.com/acillsadank/install/master/edit-squid3.sh"
+wget -O edit-stunnel4 "https://raw.githubusercontent.com/acillsadank/install/master/edit-stunnel4.sh"
+wget -O show-ports "https://raw.githubusercontent.com/acillsadank/install/master/show-ports.sh"
+wget -O usernew "https://raw.githubusercontent.com/acillsadank/install/master/usernew.sh"
+wget -O trial "https://raw.githubusercontent.com/acillsadank/install/master/trial.sh"
+wget -O delete "https://raw.githubusercontent.com/acillsadank/install/master/delete.sh"
+wget -O check "https://raw.githubusercontent.com/acillsadank/install/master/user-login.sh"
+wget -O member "https://raw.githubusercontent.com/acillsadank/install/master/user-list.sh"
+wget -O restart "https://raw.githubusercontent.com/acillsadank/install/master/restart.sh"
+wget -O speedtest "https://raw.githubusercontent.com/acillsadank/install/master/speedtest_cli.py"
+wget -O info "https://raw.githubusercontent.com/acillsadank/install/master/info.sh"
+wget -O about "https://raw.githubusercontent.com/acillsadank/install/master/about.sh"
+
+chmod +x menu
+chmod +x edit
+chmod +x edit-dropbear
+chmod +x edit-openssh
+chmod +x edit-openvpn
+chmod +x edit-squid3
+chmod +x edit-stunnel4
+chmod +x show-ports
+chmod +x usernew
+chmod +x trial
+chmod +x delete
+chmod +x check
+chmod +x member
+chmod +x restart
+chmod +x speedtest
+chmod +x info
+chmod +x about
