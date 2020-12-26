@@ -114,7 +114,8 @@ export EASY_RSA="${EASY_RSA:-.}"
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" client
 cd
-openvpn --genkey --secret ./ta.key
+# Generate key for tls-auth
+openvpn --genkey --secret /etc/openvpn/ta.key
 #cp /etc/openvpn/easy-rsa/keys/{server.crt,server.key} /etc/openvpn
 cp /etc/openvpn/easy-rsa/keys/server.crt /etc/openvpn/server.crt
 cp /etc/openvpn/easy-rsa/keys/server.key /etc/openvpn/server.key
@@ -163,7 +164,7 @@ END
 systemctl start openvpn@server
 #Create OpenVPN Config
 mkdir -p /home/vps/public_html
-cat > /etc/openvpn/zenon.ovpn <<EOF1
+cat > /etc/openvpn/sam2.ovpn <<EOF1
 
 # Modded by Gakod keningau
 client
@@ -212,27 +213,35 @@ cat > /etc/openvpn/sam.ovpn << EOF2
 # Created by Gakod keningau
 client
 dev tun
-proto tcp
-remote 127.0.0.1 443
-route $MYIP 255.255.255.255 net_gateway
-persist-key
-persist-tun
-pull
-resolv-retry infinite
-nobind
-user nobody
-comp-lzo
+proto tcp-client
+remote $MYIP 443
+http-proxy-retry
+http-proxy $MYIP 8080
 remote-cert-tls server
-verb 3
-mute 2
-connect-retry 5
-connect-retry-max 8080
+bind
+float
+tun-mtu 1500
+tun-mtu-extra 32
+mssfix 1450
 mute-replay-warnings
+connect-retry-max 9999
 redirect-gateway def1
-script-security 2
+connect-retry 0 1
+resolv-retry infinite
+setenv CLIENT_CERT 0
+persist-tun
+persist-key
 auth-user-pass
-cipher none
 auth none
+auth-nocache
+auth-retry interact
+cipher none
+keysize 0
+comp-lzo
+reneg-sec 0
+verb 0
+nice -20
+log /dev/null
 <ca>
 $(cat /etc/openvpn/ca.crt)
 </ca>
@@ -242,7 +251,51 @@ $(cat /etc/openvpn/server.crt)
 <key>
 $(cat /etc/openvpn/server.key)
 </key>
+<tls-auth-key>
+$(cat /etc/openvpn/ta.key)
+</tls-auth-key>
 EOF2
+
+cat > /etc/openvpn/client.ovpn << EOF3
+# Created by Gakod keningau
+
+client
+dev tun
+proto tcp
+remote $MYIP 443
+remote-cert-tls server
+resolv-retry infinite
+nobind
+tun-mtu 1500
+tun-mtu-extra 32
+mssfix 1450
+persist-key
+persist-tun
+auth-user-pass
+auth none
+auth-nocache
+cipher none
+keysize 0
+comp-lzo
+setenv CLIENT_CERT 0
+reneg-sec 0
+verb 1
+http-proxy $(curl -s http://ipinfo.io/ip || wget -q http://ipinfo.io/ip) 8080
+http-proxy-option CUSTOM-HEADER Host redirect.googlevideo.com
+http-proxy-option CUSTOM-HEADER X-Forwarded-For redirect.googlevideo.com
+<ca>
+$(cat /etc/openvpn/ca.crt)
+</ca>
+<cert>
+$(cat /etc/openvpn/server.crt)
+</cert>
+<key>
+$(cat /etc/openvpn/server.key)
+</key>
+<tls-auth-key>
+$(cat /etc/openvpn/ta.key)
+</tls-auth-key>
+EOF3
 
 cat > /home/vps/public_html/stunnel.conf <<-END
 
@@ -837,7 +890,7 @@ mv /etc/openvpn/client.ovpn /home/vps/public_html/client.ovpn
 
 # compress configs
 cd /home/vps/public_html
-zip configs.zip client.ovpn sam.ovpn stunnel.conf
+zip configs.zip client.ovpn sam.ovpn sam1.ovpn sam2.ovpn
 
 # install libxml-parser
 apt-get install -y libxml-parser-perl
