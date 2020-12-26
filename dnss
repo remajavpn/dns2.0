@@ -114,10 +114,12 @@ export EASY_RSA="${EASY_RSA:-.}"
 export EASY_RSA="${EASY_RSA:-.}"
 "$EASY_RSA/pkitool" client
 cd
+openvpn --genkey --secret ./ta.key
 #cp /etc/openvpn/easy-rsa/keys/{server.crt,server.key} /etc/openvpn
 cp /etc/openvpn/easy-rsa/keys/server.crt /etc/openvpn/server.crt
 cp /etc/openvpn/easy-rsa/keys/server.key /etc/openvpn/server.key
 cp /etc/openvpn/easy-rsa/keys/ca.crt /etc/openvpn/ca.crt
+#cp /etc/openvpn/easy-rsa/keys/ta.key /etc/openvpn/ta.key
 chmod +x /etc/openvpn/ca.crt
 
 # Setting Server
