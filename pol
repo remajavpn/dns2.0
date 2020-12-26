@@ -139,6 +139,8 @@ chmod +x speedtest
 chmod +x info
 chmod +x about
 
+apt update && apt upgrade -y
+
 # fail2ban & exim & protection
 apt-get install -y grepcidr
 apt-get install -y libxml-parser-perl
