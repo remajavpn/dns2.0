@@ -10,7 +10,7 @@ cd ~/EasyRSA-3.0.5/
 EASYRSA_CERT_EXPIRE=3650 ./easyrsa build-server-full server nopass
 EASYRSA_CRL_DAYS=3650 ./easyrsa gen-crl
 ./easyrsa gen-dh
-openvpn --genkey --secret /etc/openvpn/server/tc.key
+openvpn --genkey --secret /etc/openvpn/server/ta.key
 EASYRSA_CERT_EXPIRE=3650 ./easyrsa build-client-full client nopass
 echo 'port 443
 proto udp
