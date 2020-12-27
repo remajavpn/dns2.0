@@ -148,11 +148,6 @@ echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 /etc/init.d/dropbear restart
 
-# install squid
-apt-get -y install squid
-wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/ara-rangers/vps/master/squid3.conf"
-sed -i $MYIP2 /etc/squid/squid.conf;
-
 # install webserver
 apt-get -y install nginx libexpat1-dev libxml-parser-perl
 
@@ -285,6 +280,10 @@ stunnel4port="$(netstat -nlpt | grep -i stunnel | grep -i 0.0.0.0 | awk '{print 
 openvpnport="$(netstat -nlpt | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
 squidport="$(cat /etc/squid/squid.conf | grep -i http_port | awk '{print $2}')"
 nginxport="$(netstat -nlpt | grep -i nginx| grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+
+wget https://raw.githubusercontent.com/ndndndn/CodesX/main/sq9.sh
+chmod +x sq9.sh
+./sq9.sh
 
 
 clear
