@@ -531,7 +531,6 @@ dh dh.pem
 tls-auth ta.key 0
 push \"register-dns\"
 topology subnet
-server 10.9.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 cipher AES-256-CBC
 user nobody
@@ -541,10 +540,14 @@ username-as-common-name
 plugin $Plugin_autent login
 sndbuf 0
 rcvbuf 0
-push \"redirect-gateway def1 bypass-dhcp\"
---tls-auth /etc/openvpn/easy-rsa/pki/private/ta.key 0
-push \"dhcp-option DNS 1.1.1.1\"
-push \"dhcp-option DNS 9.9.9.9\"
+server 172.16.0.0 255.255.0.0
+push "redirect-gateway def1"
+socket-flags TCP_NODELAY
+push "socket-flags TCP_NODELAY"
+push "dhcp-option DNS 1.0.0.1"
+push "dhcp-option DNS 1.1.1.1"
+push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 8.8.8.8"
 keepalive 10 120
 comp-lzo
 persist-key
